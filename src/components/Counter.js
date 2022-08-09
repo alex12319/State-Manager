@@ -15,14 +15,14 @@ function Counter() {
         <div className="btns">
           <button
             onClick={() => {
-              dispatch("increment");
+              dispatch("increment", 1);
             }}
           >
             increment
           </button>
           <button
             onClick={() => {
-              dispatch("decrement");
+              dispatch("decrement", 1);
             }}
           >
             decrement

@@ -12,8 +12,8 @@ function useStateManager() {
     dispatch();
   }, []);
 
-  function dispatch(type) {
-    setState(handleActions(type));
+  function dispatch(type, payload) {
+    setState(handleActions(type, payload));
   }
 
   function subscribe(event) {

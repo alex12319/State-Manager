@@ -23,14 +23,14 @@ export function handlePublish(event, data) {
   listeners[event].forEach((item) => item(globalState));
 }
 
-export function handleActions(action) {
+export function handleActions(action, payload) {
   switch (action) {
     case "increment":
-      globalState.counter += 1;
+      globalState.counter += payload;
       return { ...globalState };
 
     case "decrement":
-      globalState.counter -= 1;
+      globalState.counter -= payload;
       return { ...globalState };
 
     default:
