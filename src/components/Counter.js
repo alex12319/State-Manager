@@ -1,23 +1,32 @@
 import React from "react";
-import useStateManager from "../store/counterStore";
+import useStateManager from "../store/useStateManager";
 import "../style.css";
 
 function Counter() {
   const {
+    state: { counter },
     dispatch,
-    subscribe,
-    state: {
-      counter: { state },
-    },
   } = useStateManager();
 
   return (
     <>
       <div className="container">
-        <h2>Counter: {state}</h2>
+        <h2>Counter:{counter} </h2>
         <div className="btns">
-          <button onClick={() => dispatch("increment")}>increment</button>
-          <button onClick={() => dispatch("decrement")}>decrement</button>
+          <button
+            onClick={() => {
+              dispatch("increment");
+            }}
+          >
+            increment
+          </button>
+          <button
+            onClick={() => {
+              dispatch("decrement");
+            }}
+          >
+            decrement
+          </button>
         </div>
       </div>
     </>
