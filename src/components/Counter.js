@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useStateManager from "../store/useStateManager";
 import "../style.css";
 
 function Counter() {
-  const {
-    state: { counter },
-    dispatch,
-  } = useStateManager();
+  const { state, dispatch, subscribe } = useStateManager();
 
+  useEffect(() => {
+    const unsubscribe = subscribe("increment");
+  }, []);
   return (
     <>
       <div className="container">
-        <h2>Counter:{counter} </h2>
+        <h2>Counter:{state.counter} </h2>
         <div className="btns">
           <button
             onClick={() => {

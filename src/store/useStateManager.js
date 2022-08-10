@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
-import {
-  handleActions,
-  handleSubscribe,
-  handlePublish,
-  handleUnsubscribe,
-} from "./stateManager";
+import { handleActions, handleSubscribe, handlePublish } from "./stateManager";
 
 function useStateManager() {
   const [state, setState] = useState({});
   useEffect(() => {
-    dispatch();
+    setState(handleActions());
   }, []);
 
   function dispatch(type, payload) {
-    setState(handleActions(type, payload));
+    handleActions(type, payload);
   }
 
   function subscribe(event) {
-    handleSubscribe(event, (globalState) => console.log(globalState));
+    const subscription = handleSubscribe(event, setState);
+
+    return () => subscription();
+  }
+
+  function publish(event) {
     handlePublish(event);
   }
-  function unsubscribe(event) {
-    handleUnsubscribe(event);
-  }
-  return { dispatch, state, subscribe, unsubscribe };
+
+  return { dispatch, state, subscribe, publish };
 }
 
 export default useStateManager;
