@@ -22,6 +22,15 @@ function createStore(reducer, initialState) {
     listeners[event].push(callback);
     return () => unsubscribe(event, callback);
   };
+  store.publish = (event) => {
+    if (!listeners[event]) {
+      return;
+    }
+
+    listeners[event].forEach((item) => {
+      console.log(`${event}:${item}`);
+    });
+  };
   function unsubscribe(event, callback) {
     listeners[event] = listeners[event].filter(
       (listener) => listener !== callback

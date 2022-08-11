@@ -14,7 +14,10 @@ function useStateManager() {
 
     return () => subscription();
   }
-  return { state, dispatch, subscribe };
+  function publish(event) {
+    store.publish(event);
+  }
+  return { state, dispatch, subscribe, publish };
 }
 
 export default useStateManager;
