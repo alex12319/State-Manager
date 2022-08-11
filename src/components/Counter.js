@@ -1,13 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import useStateManager from "../store/useStateManager";
 import "../style.css";
 
 function Counter() {
   const { state, dispatch, subscribe } = useStateManager();
+  const unsubscribe = subscribe("increment");
 
-  useEffect(() => {
-    const unsubscribe = subscribe("increment");
-  }, []);
   return (
     <>
       <div className="container">

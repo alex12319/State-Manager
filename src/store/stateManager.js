@@ -1,39 +1,45 @@
 import { counterReducer } from "./counterReducer";
 
-let globalState = {};
-const listeners = {};
+let initialState = {};
 
-export function handleSubscribe(event, callback) {
-  if (!listeners[event]) {
-    listeners[event] = [];
-  }
+function createStore(reducer, initialState) {
+  const store = {};
+  let state = initialState;
+  const listeners = {};
+  store.getState = () => state;
+  store.dispatch = (action, payload) => {
+    state = reducer(action, payload);
 
-  listeners[event].push(callback);
-  return () => unsubscribe(event, callback);
-}
-
-function unsubscribe(event, callback) {
-  listeners[event] = listeners[event].filter((l) => l !== callback);
-}
-
-export function handlePublish(event) {
-  if (!listeners[event]) {
-    return;
-  }
-  listeners[event].forEach((item) => {
-    console.log(`${event}:${item}`);
-  });
-}
-
-export function handleActions(action, payload) {
-  globalState = {
-    ...globalState,
-    ...counterReducer(action, payload),
+    for (let item in listeners) {
+      listeners[item].forEach((listener) => listener(state));
+    }
   };
+  store.subscribe = (event, callback) => {
+    if (!listeners[event]) {
+      listeners[event] = [];
+    }
 
-  for (let item in listeners) {
-    listeners[item].forEach((listener) => listener(globalState));
+    listeners[event].push(callback);
+    return () => unsubscribe(event, callback);
+  };
+  function unsubscribe(event, callback) {
+    listeners[event] = listeners[event].filter(
+      (listener) => listener !== callback
+    );
   }
-
-  return { ...globalState };
+  return store;
 }
+
+function combineReducers(obj) {
+  return (action, payload) => {
+    for (let key in obj) {
+      initialState = { ...initialState, ...obj[key](action, payload) };
+    }
+    return initialState;
+  };
+}
+const reducer = combineReducers({
+  counter: counterReducer,
+});
+
+export const store = createStore(reducer, initialState);
